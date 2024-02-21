@@ -2,8 +2,14 @@ const { Kafka } = require('kafkajs');
 
 // I want to connect to a kafka server running here: zimolong.eu:9092
 const kafka = new Kafka({
-	clientId: 'jonarumberg-aufgabenblatt',
+	clientId: 'nodejs-kafka-sender',
 	brokers: ['zimolong.eu:9092'],
+	sasl: {
+        mechanism: 'plain',
+        username: 'dhbw',
+        password: 'dhbw'
+    },
+    ssl: false, // Disabling SSL as you're using SASL_PLAINTEXT
 })
 
 // I want to consume messages from the topic WWI22B5.RumbergJona.Aufgabenblatt

@@ -3,10 +3,14 @@ const { Kafka } = require('kafkajs');
 //user: dhbw password: dhbw
 
 const kafka = new Kafka({
-	clientId: 'my-app',
+	clientId: 'nodejs-kafka-sender',
 	brokers: ['zimolong.eu:9092'],
-	user: 'dhbw',
-	password: 'dhbw'
+	sasl: {
+        mechanism: 'plain',
+        username: 'dhbw',
+        password: 'dhbw'
+    },
+    ssl: false, // Disabling SSL as you're using SASL_PLAINTEXT
 })
 
 send()
