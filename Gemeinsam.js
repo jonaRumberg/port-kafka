@@ -12,8 +12,11 @@ const kafka = new Kafka({
     ssl: false, // Disabling SSL as you're using SASL_PLAINTEXT
 })
 
+const topic = 'WWI22B5.RumbergJona.Aufgabenblatt'
+
 
 export { 
-	kafka
+	kafka,
+	topic
 };
 

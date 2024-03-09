@@ -1,10 +1,9 @@
-import { kafka } from './Gemeinsam.js'
+import { kafka, topic } from './Gemeinsam.js'
 import readlineSync from 'readline-sync';
 
 // connect the producer to the kafka server
 const prod = kafka.producer()
 await prod.connect()
-
 
 
 // input loop
@@ -18,7 +17,7 @@ while (running) {
 		running = false
 	} else {
 		await prod.send({
-			topic: 'WWI22B5.RumbergJona.Aufgabenblatt',
+			topic: topic,
 			messages: [
 				{ key: "film", value: JSON.stringify(input) },
 			]
