@@ -1,38 +1,19 @@
-const { Kafka } = require('kafkajs');
+import { kafka } from './Gemeinsam.js'
 
-// I want to connect to a kafka server running here: zimolong.eu:9092
-const kafka = new Kafka({
-	clientId: 'nodejs-kafka-sender',
-	brokers: ['zimolong.eu:9092'],
-	sasl: {
-        mechanism: 'plain',
-        username: 'dhbw',
-        password: 'dhbw'
-    },
-    ssl: false, // Disabling SSL as you're using SASL_PLAINTEXT
+const consumer = kafka.consumer({ groupId: 'jonarumberg-aufgabenblatt' })
+await consumer.connect()
+
+await consumer.subscribe({ topic: 'WWI22B5.RumbergJona.Aufgabenblatt', fromBeginning: true })
+
+await consumer.run({
+	eachMessage: async ({ topic, partition, message }) => {
+	
+		let film = JSON.parse(message.value.toString())
+
+		console.log('Film received: ')
+		console.log('Title: ' + film.title)
+		console.log('Runtime: ' + Math.floor(film.runtime/60) + 'h ' + film.runtime%60 + 'min')
+		console.log('Genre: ' + film.genre)
+
+	},
 })
-
-// I want to consume messages from the topic WWI22B5.RumbergJona.Aufgabenblatt
-consume()
-
-// This function consumes messages from the topic WWI22B5.RumbergJona.Aufgabenblatt
-async function consume() {
-
-	// I want to consume messages from the topic WWI22B5.RumbergJona.Aufgabenblatt
-	const consumer = kafka.consumer({ groupId: 'jonarumberg-aufgabenblatt' })
-
-	// I want to connect to the kafka server
-	await consumer.connect()
-
-	// I want to subscribe to the topic WWI22B5.RumbergJona.Aufgabenblatt
-	await consumer.subscribe({ topic: 'WWI22B5.RumbergJona.Aufgabenblatt', fromBeginning: true })
-
-	// I want to consume messages from the topic WWI22B5.RumbergJona.Aufgabenblatt
-	await consumer.run({
-		eachMessage: async ({ topic, partition, message }) => {
-			console.log({
-				value: message.value.toString(),
-			})
-		},
-	})
-}
